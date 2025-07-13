@@ -7,7 +7,7 @@ A comprehensive FastAPI-based microservice for managing railway passenger compla
 ### Prerequisites
 
 - Docker and Docker Compose
-- Python 3.8+ (for local development)
+- Python 3.11 (for local development)
 - PostgreSQL 14+
 
 ### Setup Instructions
@@ -16,17 +16,13 @@ A comprehensive FastAPI-based microservice for managing railway passenger compla
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/gungunkhandelwal/Dockerize-project.git
    cd RailSathiBE
    ```
 
 2. **Set up environment variables**
    ```bash
-   # Copy the example environment file
    cp .env.example .env
-   
-   # Edit the .env file with your actual values
-   # For development, you can use the default values
    ```
 
 3. **Start the application**
@@ -37,7 +33,6 @@ A comprehensive FastAPI-based microservice for managing railway passenger compla
 3. **Access the application**
    - API: http://localhost:8000
    - Swagger Documentation: http://localhost:8000/rs_microservice/docs
-   - ReDoc Documentation: http://localhost:8000/rs_microservice/redoc
 
 #### Option 2: Local Development
 
@@ -112,7 +107,7 @@ A comprehensive FastAPI-based microservice for managing railway passenger compla
 |--------|----------|-------------|
 | GET | `/rs_microservice` | Root endpoint - service status |
 | GET | `/health` | Health check endpoint |
-| GET | `/items/` | **Required assignment endpoint** - List complaints |
+| GET | `/items/` | List complaints |
 
 ### Complaint Management
 | Method | Endpoint | Description |
@@ -190,26 +185,6 @@ curl -X GET "http://localhost:8000/items/"
 - Structured logs for debugging
 - Error tracking and monitoring
 
-## 📁 Project Structure
-
-```
-RailSathiBE/
-├── main.py                 # FastAPI application entry point
-├── database.py            # Database connection and utilities
-├── services.py            # Business logic and complaint services
-├── requirements.txt       # Python dependencies
-├── Dockerfile            # Docker image configuration
-├── docker-compose.yml    # Multi-container setup
-├── init.sql             # Database schema and sample data
-├── wait-for-it.sh       # Database readiness script
-├── .dockerignore        # Docker build exclusions
-├── templates/           # Email templates
-├── media/              # Uploaded media files
-├── logs/               # Application logs
-└── utils/              # Utility functions
-    └── email_utils.py  # Email handling utilities
-```
-
 ## 🚨 Limitations and Assumptions
 
 ### Design Decisions
@@ -231,8 +206,5 @@ RailSathiBE/
 ## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
-
----
 
 **Rail Sathi Backend API** - Empowering railway passengers with efficient complaint management.
