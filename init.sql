@@ -118,6 +118,6 @@ INSERT INTO rail_sathi_railsathicomplain (
     pnr_number, name, mobile_number, complain_type, complain_description, 
     complain_status, train_number, train_name, created_by
 ) VALUES 
-('PNR123456', 'John Doe', '9876543210', 'Cleanliness', 'Train was not clean', 'pending', '12345', 'Sample Train', 'John Doe'),
-('PNR789012', 'Jane Smith', '9876543211', 'Food', 'Food quality was poor', 'pending', '67890', 'Test Train', 'Jane Smith')
+('PNR123456', 'Rakesh kumar', '9876543210', 'Cleanliness', 'Train was not clean', 'pending', '12345', 'Sample Train', 'Rakesh kumar'),
+('PNR789012', 'Rani sharma', '9876543211', 'Food', 'Food quality was poor', 'pending', '67890', 'Test Train', 'Rani sharma')
 ON CONFLICT DO NOTHING;

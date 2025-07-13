@@ -1,207 +1,230 @@
-# Rail Sathi FastAPI Application
+# Rail Sathi Backend API
 
-A FastAPI-based microservice for handling railway passenger complaints with Docker containerization.
+A comprehensive FastAPI-based microservice for managing railway passenger complaints with media upload, email notifications, and real-time processing capabilities.
 
 ## 🚀 Quick Start
 
-1. **Start the application:**
-   ```bash
-   docker-compose up --build
-   ```
+### Prerequisites
 
-2. **Access the API:**
-   - **Main API**: http://localhost:8000/rs_microservice/
-   - **Required Endpoint**: http://localhost:8000/items/
-   - **API Documentation**: http://localhost:8000/rs_microservice/docs
-   - **Health Check**: http://localhost:8000/health
+- Docker and Docker Compose
+- Python 3.8+ (for local development)
+- PostgreSQL 14+
 
-## 📚 API Documentation
+### Setup Instructions
 
-### Swagger UI (Interactive)
-Visit **http://localhost:8000/rs_microservice/docs** for interactive API documentation where you can:
-- View all available endpoints
-- Test API calls directly from the browser
-- See request/response examples
-- Understand authentication requirements
-- Explore different data models
+#### Option 1: Using Docker (Recommended)
 
-### ReDoc (Alternative Documentation)
-Visit **http://localhost:8000/rs_microservice/redoc** for a more detailed, organized view of the API.
-
-### OpenAPI JSON
-Access the raw OpenAPI specification at **http://localhost:8000/rs_microservice/openapi.json**
-
-## Features
-
-- ✅ Complaint management (CRUD operations)
-- ✅ Media file upload support (images/videos)
-- ✅ Email notifications
-- ✅ PostgreSQL database integration
-- ✅ Docker containerization
-- ✅ API documentation with Swagger
-- ✅ Wait-for-it script for database startup handling
-- ✅ Hot-reloading for development
-- ✅ Environment variables configuration
-
-## Setup Instructions
-
-### Using Docker (Recommended)
-
-1. Clone the repository:
+1. **Clone the repository**
    ```bash
    git clone <repository-url>
    cd RailSathiBE
    ```
 
-2. Copy environment file:
+2. **Start the application**
    ```bash
-   cp .env.example .env
-   # Edit .env with your configuration
-   ```
-
-3. Run with Docker Compose:
-   ```bash
+   cp .env .env.example
    docker-compose up --build
    ```
 
-4. Access the application:
-   - Main API: http://localhost:8000/rs_microservice/
-   - Required endpoint: http://localhost:8000/items/
-   - API docs (Swagger): http://localhost:8000/rs_microservice/docs
-   - API docs (ReDoc): http://localhost:8000/rs_microservice/redoc
-   - Health check: http://localhost:8000/health
+3. **Access the application**
+   - API: http://localhost:8000
+   - Swagger Documentation: http://localhost:8000/rs_microservice/docs
+   - ReDoc Documentation: http://localhost:8000/rs_microservice/redoc
 
-### Local Development
+#### Option 2: Local Development
 
-1. Install dependencies:
+1. **Create virtual environment**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+2. **Install dependencies**
    ```bash
    pip install -r requirements.txt
    ```
 
-2. Set up PostgreSQL database
-
-3. Copy and configure environment variables:
+3. **Set up PostgreSQL database**
    ```bash
-   cp .env.example .env
-   # Edit .env with your configuration
+   # Create database and run init.sql
+   psql -U postgres -d rail_sathi_db -f init.sql
    ```
 
-4. Run the server:
+5. **Run the application**
    ```bash
    uvicorn main:app --host 0.0.0.0 --port 8000 --reload
    ```
 
-## API Endpoints
+## 🏗️ Architecture
 
-### Required Endpoint
-- `GET /items/` - List complaints (required for assignment)
+### Container Structure
+- **railsathi_web**: FastAPI application container
+- **railsathi_db**: PostgreSQL database container
 
-### Main API Endpoints
-- `GET /rs_microservice/` - Health check
-- `GET /rs_microservice/complaint/get/{id}` - Get complaint by ID
-- `GET /rs_microservice/complaint/get/date/{date}?mobile_number=1234567890` - Get complaints by date
-- `POST /rs_microservice/complaint/add` - Create new complaint
-- `PATCH /rs_microservice/complaint/update/{id}` - Update complaint
-- `PUT /rs_microservice/complaint/update/{id}` - Replace complaint
-- `DELETE /rs_microservice/complaint/delete/{id}` - Delete complaint
-- `DELETE /rs_microservice/media/delete/{id}` - Delete media files
-- `GET /rs_microservice/train_details/{train_no}` - Get train details
-- `GET /health` - Health check
+### Key Components
+- **FastAPI**: Modern, fast web framework for building APIs
+- **PostgreSQL**: Robust relational database
+- **Docker**: Containerized deployment
+- **Uvicorn**: ASGI server with hot-reload support
 
-## Docker Features
+## 🔧 Key Features
 
-### ✅ Wait-for-it Script
-- Ensures PostgreSQL is ready before starting the FastAPI application
-- Prevents connection errors during startup
-- Located in `wait-for-it.sh`
+### 1. Complaint Management
+- ✅ Create, read, update, and delete complaints
+- ✅ Support for PNR validation
+- ✅ Train information integration
+- ✅ Status tracking (pending, in-progress, completed)
 
-### ✅ Swagger Documentation
-- Automatic API documentation at `/rs_microservice/docs`
-- Interactive API testing interface
-- ReDoc alternative at `/rs_microservice/redoc`
+### 2. Media Upload
+- ✅ Image and video file support
+- ✅ Automatic file compression
+- ✅ Cloud storage integration (Google Cloud Storage)
+- ✅ Multiple file upload per complaint
 
-### ✅ Hot-reloading
-- Code changes are automatically detected
-- No need to restart containers for development
-- Volume mounting for real-time updates
+### 3. Email Notifications
+- ✅ Automated email alerts for complaint creation
+- ✅ Configurable SMTP settings
+- ✅ HTML email templates
+- ✅ Asynchronous email processing
 
-### ✅ Environment Variables
-- Secure configuration management
-- Database, email, and app settings
-- Easy deployment across environments
+### 4. Train Information
+- ✅ Train details lookup by train number
+- ✅ Depot and division information
+- ✅ Real-time train data integration
 
-## Design Decisions
+### 5. User Authentication
+- ✅ Name and mobile number verification
+- ✅ Secure complaint access control
+- ✅ User-specific complaint management
 
-- **FastAPI Framework**: Chosen for high performance and automatic API documentation
-- **PostgreSQL**: Robust relational database for complaint data
-- **Docker**: Containerization for easy deployment and development
-- **Wait-for-it Script**: Ensures database is ready before starting the application
-- **Environment Variables**: Secure configuration management
-- **Media Upload**: Support for images and videos with Google Cloud Storage
-- **Email Notifications**: Automated alerts for complaint management
-- **Hot-reloading**: Development-friendly with automatic code updates
+## 📚 API Endpoints
 
-## Database Schema
+### System Endpoints
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/rs_microservice` | Root endpoint - service status |
+| GET | `/health` | Health check endpoint |
+| GET | `/items/` | **Required assignment endpoint** - List complaints |
 
-The application uses the following PostgreSQL tables:
-- `rail_sathi_railsathicomplain` - Main complaints table
-- `rail_sathi_railsathicomplainmedia` - Media files table
-- `user_onboarding_user` - User management
-- `user_onboarding_roles` - Role definitions
-- `trains_trainaccess` - Train access permissions
-- `trains_traindetails` - Train information
-- `station_Depot` - Depot information
-- `station_division` - Division information
-- `station_zone` - Zone information
+### Complaint Management
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/rs_microservice/complaint/add` | Create new complaint |
+| GET | `/rs_microservice/complaint/get/{id}` | Get complaint by ID |
+| GET | `/rs_microservice/complaint/get/date/{date}` | Get complaints by date |
+| PATCH | `/rs_microservice/complaint/update/{id}` | Update complaint (partial) |
+| PUT | `/rs_microservice/complaint/update/{id}` | Replace complaint (full) |
+| DELETE | `/rs_microservice/complaint/delete/{id}` | Delete complaint |
 
-## Environment Variables
+### Media Management
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| DELETE | `/rs_microservice/media/delete/{id}` | Delete media files |
 
-Required environment variables:
-- Database configuration (POSTGRES_*)
-- Email configuration (MAIL_*)
-- Google Cloud Storage (GCS_*)
-- App configuration (app_*)
+### Train Information
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/rs_microservice/train_details/{train_no}` | Get train details |
 
-## Development Workflow
+## 🧪 Testing the API
 
-1. **Start the application**:
-   ```bash
-   docker-compose up --build
-   ```
+### Using Swagger UI
+1. Open http://localhost:8000/rs_microservice/docs
+2. Explore and test all endpoints interactively
 
-2. **Make code changes** - they will be automatically detected
+### Using curl
 
-3. **Test endpoints**:
-   - http://localhost:8000/items/ (required endpoint)
-   - http://localhost:8000/rs_microservice/docs (Swagger docs)
+#### Create a Complaint
+```bash
+curl -X POST "http://localhost:8000/rs_microservice/complaint/add" \
+  -F "name=John Doe" \
+  -F "mobile_number=9876543210" \
+  -F "complain_type=Cleanliness" \
+  -F "complain_description=Train was not clean" \
+  -F "train_number=12345" \
+  -F "train_name=Sample Train"
+```
 
-4. **View logs**:
-   ```bash
-   docker-compose logs -f web
-   ```
+#### Get Complaint by ID
+```bash
+curl -X GET "http://localhost:8000/rs_microservice/complaint/get/1"
+```
 
-## Production Deployment
+#### Get Complaints by Date
+```bash
+curl -X GET "http://localhost:8000/rs_microservice/complaint/get/date/2025-01-15?mobile_number=9876543210"
+```
 
-For production, consider:
-- Using environment-specific `.env` files
-- Setting up proper SSL/TLS
-- Configuring proper database backups
-- Setting up monitoring and logging
-- Using a production-grade WSGI server
+#### Get Train Details
+```bash
+curl -X GET "http://localhost:8000/rs_microservice/train_details/12345"
+```
 
-## Troubleshooting
+#### Required Assignment Endpoint
+```bash
+curl -X GET "http://localhost:8000/items/"
+```
 
-### Database Connection Issues
-- Ensure PostgreSQL container is healthy
-- Check environment variables
-- Verify wait-for-it script is working
+## 🔄 Development Features
 
-### Hot-reloading Not Working
-- Check volume mounts in docker-compose.yml
-- Ensure file permissions are correct
-- Restart containers if needed
+### Hot Reload
+- Code changes automatically trigger server restart
+- Volume mounting for real-time development
+- Docker-based development environment
 
-### API Documentation Not Loading
-- Check if FastAPI is running properly
-- Verify the docs URLs are correct
-- Check for any import errors
+### Database Management
+- Automatic database initialization with sample data
+- Health checks for database connectivity
+- Wait-for-it script ensures proper startup order
+
+### Logging
+- Comprehensive logging configuration
+- Structured logs for debugging
+- Error tracking and monitoring
+
+## 📁 Project Structure
+
+```
+RailSathiBE/
+├── main.py                 # FastAPI application entry point
+├── database.py            # Database connection and utilities
+├── services.py            # Business logic and complaint services
+├── requirements.txt       # Python dependencies
+├── Dockerfile            # Docker image configuration
+├── docker-compose.yml    # Multi-container setup
+├── init.sql             # Database schema and sample data
+├── wait-for-it.sh       # Database readiness script
+├── .dockerignore        # Docker build exclusions
+├── templates/           # Email templates
+├── media/              # Uploaded media files
+├── logs/               # Application logs
+└── utils/              # Utility functions
+    └── email_utils.py  # Email handling utilities
+```
+
+## 🚨 Limitations and Assumptions
+
+### Design Decisions
+1. **FastAPI**: Chosen for modern async support and automatic API documentation
+2. **PostgreSQL**: Selected for ACID compliance and complex queries
+3. **Docker**: Containerized deployment for consistency and scalability
+4. **Form Data**: Using form data for file uploads instead of JSON
+5. **Synchronous Database**: Using psycopg2 for simplicity (async version available)
+
+## 📈 Performance Considerations
+
+1. **Database Indexing**: Proper indexes on frequently queried columns
+2. **File Compression**: Automatic image/video compression
+3. **Async Processing**: Background tasks for email and file uploads
+4. **Connection Pooling**: Database connection reuse
+5. **Error Handling**: Comprehensive error handling and logging
+
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+
+---
+
+**Rail Sathi Backend API** - Empowering railway passengers with efficient complaint management.

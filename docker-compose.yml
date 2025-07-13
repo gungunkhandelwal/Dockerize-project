@@ -4,6 +4,8 @@ services:
   db:
     image: postgres:14
     container_name: railsathi_db
+    env_file:
+      - .env
     environment:
       POSTGRES_DB: rail_sathi_db
       POSTGRES_USER: postgres
@@ -22,6 +24,8 @@ services:
   web:
     build: .
     container_name: railsathi_web
+    env_file:
+      - .env
     depends_on:
       db:
         condition: service_healthy
