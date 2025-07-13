@@ -1,7 +1,5 @@
-# Use Python 3.11 slim image
 FROM python:3.11-slim
 
-# Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
@@ -18,20 +16,16 @@ RUN apt-get update \
         ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements file
 COPY requirements.txt .
 
-# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy project
 COPY . .
 
-# Create necessary directories
 RUN mkdir -p /app/media
 RUN mkdir -p /tmp/rail_sathi_temp
 
-# Make wait-for-it script executable
 RUN chmod +x wait-for-it.sh
 
 # Expose port
