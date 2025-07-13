@@ -428,7 +428,7 @@ def get_complaint_by_id(complain_id: int):
     try:
         # Get complaint
         query = """
-            SELECT c.*, t.train_no, t.train_name, t."Depot" as train_depot
+            SELECT c.*, t.train_no, t.train_name, t.depot as train_depot
             FROM rail_sathi_railsathicomplain c
             LEFT JOIN trains_traindetails t ON c.train_id = t.id
             WHERE c.complain_id = %s
@@ -457,7 +457,7 @@ def get_complaints_by_date(complain_date: date, mobile_number: str):
     conn = get_db_connection()
     try:
         query = """
-            SELECT c.*, t.train_no, t.train_name, t."Depot" as train_depot
+            SELECT c.*, t.train_no, t.train_name, t.depot as train_depot
             FROM rail_sathi_railsathicomplain c
             LEFT JOIN trains_traindetails t ON c.train_id = t.id
             WHERE c.complain_date = %s AND c.mobile_number = %s
