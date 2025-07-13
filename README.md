@@ -20,9 +20,17 @@ A comprehensive FastAPI-based microservice for managing railway passenger compla
    cd RailSathiBE
    ```
 
-2. **Start the application**
+2. **Set up environment variables**
    ```bash
-   cp .env .env.example
+   # Copy the example environment file
+   cp .env.example .env
+   
+   # Edit the .env file with your actual values
+   # For development, you can use the default values
+   ```
+
+3. **Start the application**
+   ```bash
    docker-compose up --build
    ```
 

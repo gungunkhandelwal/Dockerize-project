@@ -7,9 +7,9 @@ services:
     env_file:
       - .env
     environment:
-      POSTGRES_DB: rail_sathi_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -33,24 +33,24 @@ services:
       # Database Configuration
       - POSTGRES_HOST=db
       - POSTGRES_PORT=5432
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=rail_sathi_db
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
       
       #Email Configuration
-      - MAIL_USERNAME=test@example.com
-      - MAIL_PASSWORD=testpassword
-      - MAIL_FROM=test@example.com
-      - MAIL_PORT=587
-      - MAIL_SERVER=smtp.gmail.com
-      - MAIL_STARTTLS=True
-      - MAIL_SSL_TLS=False
-      - USE_CREDENTIALS=True
-      - VALIDATE_CERTS=True
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - MAIL_FROM=${MAIL_FROM}
+      - MAIL_PORT=${MAIL_PORT}
+      - MAIL_SERVER=${MAIL_SERVER}
+      - MAIL_STARTTLS=${MAIL_STARTTLS}
+      - MAIL_SSL_TLS=${MAIL_SSL_TLS}
+      - USE_CREDENTIALS=${USE_CREDENTIALS}
+      - VALIDATE_CERTS=${VALIDATE_CERTS}
       
       # Google Cloud Storage
-      - GCS_BUCKET_NAME=test-bucket
-      - PROJECT_ID=test-project
+      - GCS_BUCKET_NAME=${GCS_BUCKET_NAME}
+      - PROJECT_ID=${PROJECT_ID}
       
       # App Configuration
       - app_host=0.0.0.0

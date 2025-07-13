@@ -23,8 +23,14 @@ logger = logging.getLogger(__name__)
 load_dotenv()
 
 # Configuration from environment
-GCS_BUCKET_NAME = os.getenv('GCS_BUCKET_NAME', 'sanchalak-media-bucket1')
-PROJECT_ID = os.getenv('PROJECT_ID', 'sanchalak-423912')
+GCS_BUCKET_NAME = os.getenv('GCS_BUCKET_NAME')
+PROJECT_ID = os.getenv('PROJECT_ID')
+
+# Validate required environment variables
+if not GCS_BUCKET_NAME:
+    logger.warning("GCS_BUCKET_NAME not set - media uploads will be disabled")
+if not PROJECT_ID:
+    logger.warning("PROJECT_ID not set - media uploads will be disabled")
 
 
 def get_gcs_client():
