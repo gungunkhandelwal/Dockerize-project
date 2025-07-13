@@ -2,6 +2,35 @@
 
 A FastAPI-based microservice for handling railway passenger complaints with Docker containerization.
 
+## 🚀 Quick Start
+
+1. **Start the application:**
+   ```bash
+   docker-compose up --build
+   ```
+
+2. **Access the API:**
+   - **Main API**: http://localhost:8000/rs_microservice/
+   - **Required Endpoint**: http://localhost:8000/items/
+   - **API Documentation**: http://localhost:8000/rs_microservice/docs
+   - **Health Check**: http://localhost:8000/health
+
+## 📚 API Documentation
+
+### Swagger UI (Interactive)
+Visit **http://localhost:8000/rs_microservice/docs** for interactive API documentation where you can:
+- View all available endpoints
+- Test API calls directly from the browser
+- See request/response examples
+- Understand authentication requirements
+- Explore different data models
+
+### ReDoc (Alternative Documentation)
+Visit **http://localhost:8000/rs_microservice/redoc** for a more detailed, organized view of the API.
+
+### OpenAPI JSON
+Access the raw OpenAPI specification at **http://localhost:8000/rs_microservice/openapi.json**
+
 ## Features
 
 - ✅ Complaint management (CRUD operations)

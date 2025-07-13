@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Depends
 from fastapi.responses import JSONResponse
 from typing import List, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime, date, time
 import asyncio
@@ -15,11 +15,31 @@ from services import (
 
 app = FastAPI(
     title="Rail Sathi Complaint API",
-    description="API for handling rail complaints",
+    description="""
+    ## Rail Sathi Complaint Management System
+    
+    A comprehensive API for handling railway passenger complaints with the following features:
+    
+    * **Complaint Management**: Create, read, update, and delete complaints
+    * **Media Upload**: Support for images and videos with complaints
+    * **Email Notifications**: Automated alerts for complaint management
+    * **Train Information**: Get detailed train and depot information
+    * **User Authentication**: Secure complaint access and modification
+    
+    ### Quick Start
+    
+    1. **Create a Complaint**: POST `/rs_microservice/complaint/add`
+    2. **Get Complaints**: GET `/rs_microservice/complaint/get/{id}`
+    3. **List Items**: GET `/items/` (Required endpoint for assignment)
+    4. **View API Docs**: GET `/rs_microservice/docs`
+    """,
     version="1.0.0",
-    openapi_url="/rs_microservice/openapi.json",  # Add the prefix here
-    docs_url="/rs_microservice/docs",             # Add the prefix here
-    redoc_url="/rs_microservice/redoc"            # Add the prefix here (optional)
+    openapi_url="/rs_microservice/openapi.json",
+    docs_url="/rs_microservice/docs",
+    redoc_url="/rs_microservice/redoc",
+    servers=[
+        {"url": "http://localhost:8000", "description": "Development server"},
+    ],
 )
 
 # Configure logging
@@ -38,7 +58,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/rs_microservice")
+@app.get("/rs_microservice", tags=["System"])
 async def root():
     return {"message": "Rail Sathi Microservice is running"}
 
@@ -105,9 +125,8 @@ class RailSathiComplainFlatResponse(BaseModel):
     updated_by: Optional[str]
     rail_sathi_complain_media_files: List[RailSathiComplainMediaResponse]
 
-@app.get("/rs_microservice/complaint/get/{complain_id}", response_model=RailSathiComplainResponse)
+@app.get("/rs_microservice/complaint/get/{complain_id}", response_model=RailSathiComplainResponse, tags=["Complaints"])
 async def get_complaint(complain_id: int):
-    """Get complaint by ID"""
     try:
         complaint = get_complaint_by_id(complain_id)
         if not complaint:
@@ -122,9 +141,8 @@ async def get_complaint(complain_id: int):
         logger.error(f"Error getting complaint {complain_id}: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
 
-@app.get("/rs_microservice/complaint/get/date/{date_str}", response_model=List[RailSathiComplainResponse])
+@app.get("/rs_microservice/complaint/get/date/{date_str}", response_model=List[RailSathiComplainResponse], tags=["Complaints"])
 async def get_complaints_by_date_endpoint(date_str: str, mobile_number: Optional[str] = None):
-    """Get complaints by date and mobile number"""
     try:
         # Validate date format
         try:
@@ -153,8 +171,8 @@ async def get_complaints_by_date_endpoint(date_str: str, mobile_number: Optional
         logger.error(f"Error getting complaints by date {date_str}: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
 
-@app.post("/rs_microservice/complaint/add", response_model=RailSathiComplainResponse)
-@app.post("/rs_microservice/complaint/add/", response_model=RailSathiComplainResponse)
+@app.post("/rs_microservice/complaint/add", response_model=RailSathiComplainResponse, tags=["Complaints"])
+@app.post("/rs_microservice/complaint/add/", response_model=RailSathiComplainResponse, tags=["Complaints"])
 async def create_complaint_endpoint_threaded(
     pnr_number: Optional[str] = Form(None),
     is_pnr_validated: Optional[str] = Form("not-attempted"),
@@ -172,7 +190,6 @@ async def create_complaint_endpoint_threaded(
     berth_no: Optional[int] = Form(None),
     rail_sathi_complain_media_files: List[UploadFile] = File(default=[])
 ):
-    """Create new complaint with improved file handling"""
     try:
         logger.info(f"Creating complaint for user: {name}")
         logger.info(f"Number of files received: {len(rail_sathi_complain_media_files)}")
@@ -280,7 +297,7 @@ async def create_complaint_endpoint_threaded(
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 
-@app.patch("/rs_microservice/complaint/update/{complain_id}", response_model=RailSathiComplainResponse)
+@app.patch("/rs_microservice/complaint/update/{complain_id}", response_model=RailSathiComplainResponse, tags=["Complaints"])
 async def update_complaint_endpoint(
     complain_id: int,
     pnr_number: Optional[str] = Form(None),
@@ -298,7 +315,6 @@ async def update_complaint_endpoint(
     berth_no: Optional[int] = Form(None),
     rail_sathi_complain_media_files: List[UploadFile] = File(default=[])
 ):
-    """Update complaint (partial update)"""
     try:
         logger.info(f"Updating complaint {complain_id} for user: {name}")
         logger.info(f"Number of files received: {len(rail_sathi_complain_media_files)}")
@@ -399,7 +415,7 @@ async def update_complaint_endpoint(
         logger.error(f"Full traceback: {traceback.format_exc()}")
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
-@app.put("/rs_microservice/complaint/update/{complain_id}", response_model=RailSathiComplainResponse)
+@app.put("/rs_microservice/complaint/update/{complain_id}", response_model=RailSathiComplainResponse, tags=["Complaints"])
 async def replace_complaint_endpoint(
     complain_id: int,
     pnr_number: Optional[str] = Form(None),
@@ -417,7 +433,6 @@ async def replace_complaint_endpoint(
     berth_no: Optional[int] = Form(None),
     rail_sathi_complain_media_files: List[UploadFile] = File(default=[])
 ):
-    """Replace complaint (full update)"""
     try:
         logger.info(f"Replacing complaint {complain_id} for user: {name}")
         logger.info(f"Number of files received: {len(rail_sathi_complain_media_files)}")
@@ -520,13 +535,12 @@ async def replace_complaint_endpoint(
         logger.error(f"Full traceback: {traceback.format_exc()}")
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
-@app.delete("/rs_microservice/complaint/delete/{complain_id}")
+@app.delete("/rs_microservice/complaint/delete/{complain_id}", tags=["Complaints"])
 async def delete_complaint_endpoint(
     complain_id: int,
     name: str = Form(...),
     mobile_number: str = Form(...)
 ):
-    """Delete complaint"""
     try:
         logger.info(f"Deleting complaint {complain_id} for user: {name}")
         
@@ -555,14 +569,13 @@ async def delete_complaint_endpoint(
         logger.error(f"Full traceback: {traceback.format_exc()}")
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
-@app.delete("/rs_microservice/media/delete/{complain_id}")
+@app.delete("/rs_microservice/media/delete/{complain_id}", tags=["Media"])
 async def delete_complaint_media_endpoint(
     complain_id: int,
     name: str = Form(...),
     mobile_number: str = Form(...),
     deleted_media_ids: List[int] = Form(...)
 ):
-    """Delete complaint media files"""
     try:
         logger.info(f"Deleting media files for complaint {complain_id} for user: {name}")
         logger.info(f"Media IDs to delete: {deleted_media_ids}")
@@ -610,7 +623,7 @@ def make_json_serializable(data):
     else:
         return data
 
-@app.get("/rs_microservice/train_details/{train_no}")
+@app.get("/rs_microservice/train_details/{train_no}", tags=["Trains"])
 def get_train_details(train_no: str):
     conn = get_db_connection()
     cursor = conn.cursor(cursor_factory=RealDictCursor)
@@ -660,14 +673,12 @@ def get_train_details(train_no: str):
         cursor.close()
         conn.close()
     
-@app.get("/health")
+@app.get("/health", tags=["System"])
 async def health_check():
-    """Health check endpoint"""
     return {"status": "healthy"}
 
-@app.get("/items/")
+@app.get("/items/", tags=["Assignment"])
 async def items_list():
-    """Required endpoint for assignment - list complaints"""
     try:
         # Get all complaints from database
         conn = get_db_connection()
